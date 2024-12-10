@@ -43,7 +43,7 @@ export const useFocusSystemHandlers = ({
       toValue: 1.1,
       friction: 9,
       tension: 100,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   };
 
