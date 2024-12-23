@@ -23,6 +23,7 @@ export const LightTheme: Theme = {
       .alpha(opacity.level2)
       .rgb()
       .string(),
+    surfaceContainer: palette.neutral94,
     background: palette.neutral99,
     error: palette.error40,
     errorContainer: palette.error90,

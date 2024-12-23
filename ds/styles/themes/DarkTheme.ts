@@ -18,12 +18,13 @@ export const DarkTheme: Theme = {
     secondaryContainer: palette.secondary30,
     tertiary: palette.tertiary80,
     tertiaryContainer: palette.tertiary30,
-    surface: palette.neutral10,
+    surface: palette.neutral6,
     surfaceVariant: palette.neutralVariant30,
     surfaceDisabled: color(palette.neutral90)
       .alpha(opacity.level2)
       .rgb()
       .string(),
+    surfaceContainer: palette.neutral12,
     background: palette.neutral10,
     error: palette.error80,
     errorContainer: palette.error30,
