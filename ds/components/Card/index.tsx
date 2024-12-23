@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
-  Animated,
-  StyleSheet,
   View,
+  Animated,
   ViewStyle,
+  StyleSheet,
+  ImageBackground,
   TouchableOpacity,
-  Image,
-  TextStyle,
+  type TextStyle,
   type StyleProp,
   type ImageSourcePropType,
   type GestureResponderEvent,
@@ -183,8 +183,6 @@ const Card = (
     onPressOut,
   });
 
-  //   const borderRadius = buttonSize / 2;
-
   const {
     titleColor,
     subtitleColor,
@@ -198,19 +196,18 @@ const Card = (
     focusState,
   });
 
+  const borderRadius = mode === 'classic' ? 8 : 12;
+
   const highlightedStyles = {
     borderWidth: 2,
+    margin: 2,
     borderStyle: 'solid',
     borderColor,
-    borderRadius: mode === 'classic' ? 8 : 12,
+    borderRadius,
     boxShadow:
       focusState === 'focused' && !disabled
         ? '0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.3)'
         : '0px 0px 0px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 0px rgba(0, 0, 0, 0.3)',
-  } as StyleProp<ViewStyle>;
-
-  const buttonStyle = {
-    // backgroundColor,
   } as StyleProp<ViewStyle>;
 
   const isHorizontal = mode === 'wide-classic' || mode === 'wide-standard';
@@ -234,92 +231,111 @@ const Card = (
       testID={`${testID}-container`}
     >
       <Animated.View
-        style={[
-          styles.cardContent,
-          buttonStyle,
-          { transform: [{ scale }] },
-          disabled && styles.disabled,
-          isHorizontal && styles.cardContentHorizontal,
-          isFullHiglighted && highlightedStyles,
-        ]}
-        testID={`${testID}-content`}
+        style={[{ transform: [{ scale }] }]}
+        testID={`${testID}-animated-wrapper`}
       >
         <View
           style={[
-            styles.imageContainer,
-            isInnerHiglighted && highlightedStyles,
-            { aspectRatio, width: imageWidth },
+            styles.cardContent,
+            isFullHiglighted && highlightedStyles,
+            isHorizontal && styles.cardContentHorizontal,
+            {
+              overflow: isFullHiglighted ? 'hidden' : 'visible',
+            },
+            disabled && styles.disabled,
           ]}
-          testID={`${testID}-image-container`}
+          testID={`${testID}-content`}
         >
-          <Image
-            resizeMode="contain"
-            testID={`${testID}-image`}
-            source={source}
+          <View
             style={[
-              styles.image,
-              isInnerHiglighted && {
-                borderRadius: 12,
+              styles.imageContainer,
+              isInnerHiglighted && highlightedStyles,
+              mode === 'classic' && {
+                borderTopRightRadius: borderRadius,
+                borderTopLeftRadius: borderRadius,
               },
               { aspectRatio, width: imageWidth },
             ]}
-            accessibilityIgnoresInvertColors
-          />
-          {mode === 'compact' && (
-            <LinearGradient
-              testID={`${testID}-image-gradient`}
-              colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0)']}
-              start={{ x: 0.5, y: 1 }}
-              end={{ x: 0.5, y: 0 }}
-              locations={[0.1, 1]}
-              style={styles.imageLinearGradient}
-            />
-          )}
-        </View>
-        <View
-          style={[
-            styles.contentBlock,
-            mode === 'standard'
-              ? styles.contentBlockStandart
-              : isHorizontal
-              ? styles.contentBlockHorizontal
-              : styles.contentBlockVertical,
-            mode === 'compact' && styles.contentBlockCompact,
-            { backgroundColor },
-          ]}
-          testID={`${testID}-content-block`}
-        >
-          <Text
-            style={[styles.title, { color: titleColor }, titleStyle]}
-            numberOfLines={titleNumberOfLines}
-            variant={titleVariant}
+            testID={`${testID}-image-container`}
           >
-            {title}
-          </Text>
-
-          {subtitle && !disabled && (
+            <ImageBackground
+              resizeMode="cover"
+              borderRadius={isInnerHiglighted ? borderRadius : 0}
+              testID={`${testID}-image`}
+              source={source}
+              style={[styles.image, { width: imageWidth }]}
+              accessibilityIgnoresInvertColors
+            />
+            {mode === 'compact' && (
+              <LinearGradient
+                testID={`${testID}-image-gradient`}
+                colors={['rgba(0, 0, 0, 0.8)', 'rgba(0, 0, 0, 0)']}
+                start={{ x: 0.5, y: 1 }}
+                end={{ x: 0.5, y: 0 }}
+                locations={[0.1, 1]}
+                style={[
+                  styles.imageLinearGradient,
+                  {
+                    width: imageWidth,
+                    borderRadius,
+                  },
+                ]}
+              />
+            )}
+          </View>
+          <View
+            style={[
+              styles.contentBlock,
+              mode === 'standard'
+                ? styles.contentBlockStandart
+                : isHorizontal
+                ? styles.contentBlockHorizontal
+                : styles.contentBlockVertical,
+              mode === 'compact' && styles.contentBlockCompact,
+              mode === 'classic' && {
+                borderBottomRightRadius: borderRadius,
+                borderBottomLeftRadius: borderRadius,
+              },
+              { backgroundColor },
+            ]}
+            testID={`${testID}-content-block`}
+          >
             <Text
-              style={[styles.subtitle, { color: subtitleColor }, subtitleStyle]}
-              numberOfLines={subtitleNumberOfLines}
-              variant={subtitleVariant}
+              style={[styles.title, { color: titleColor }, titleStyle]}
+              numberOfLines={titleNumberOfLines}
+              variant={titleVariant}
             >
-              {subtitle}
+              {title}
             </Text>
-          )}
 
-          {description && !disabled && (
-            <Text
-              style={[
-                styles.description,
-                { color: descriptionColor },
-                descriptionStyle,
-              ]}
-              numberOfLines={descriptionNumberOfLines}
-              variant={descriptionVariant}
-            >
-              {description}
-            </Text>
-          )}
+            {subtitle && !disabled && (
+              <Text
+                style={[
+                  styles.subtitle,
+                  { color: subtitleColor },
+                  subtitleStyle,
+                ]}
+                numberOfLines={subtitleNumberOfLines}
+                variant={subtitleVariant}
+              >
+                {subtitle}
+              </Text>
+            )}
+
+            {description && !disabled && (
+              <Text
+                style={[
+                  styles.description,
+                  { color: descriptionColor },
+                  descriptionStyle,
+                ]}
+                numberOfLines={descriptionNumberOfLines}
+                variant={descriptionVariant}
+              >
+                {description}
+              </Text>
+            )}
+          </View>
         </View>
       </Animated.View>
     </TouchableOpacity>
@@ -327,13 +343,9 @@ const Card = (
 };
 
 const styles = StyleSheet.create({
-  card: {
-    // height: 200,
-    // flex: 1,
-    // flexShrink: 1,
-  },
+  card: {},
   cardContent: {
-    overflow: 'hidden',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -346,36 +358,20 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    // flex: 1,
   },
+  imageContainerClassic: {},
   image: {
     flex: 1,
-    height: 'auto',
-    width: 'auto',
-    // width: '100%',
-    // height: undefined,
-    // aspectRatio: 1,
-    // backgroundColor: 'red',
-    // width: undefined,
-    // height: '100%',
-    // aspectRatio: 1,
-    // alignSelf: 'center',
-    // flex: 1,
-    // width: undefined,
-    // height: undefined,
-    // width: '100%',
-    // height: undefined,
-    // aspectRatio: 1,
-    // height: '100%',
-    // width: '100%',
-    objectFit: 'cover',
-    resizeMode: 'cover',
-    // marginRight: -16.5,
-    // opacity: 0.8,
+    height: '100%',
+  },
+  imageLinearGradient: {
+    position: 'absolute',
+    inset: -2,
   },
   contentBlock: {
     width: '100%',
     alignItems: 'flex-start',
+    overflow: 'hidden',
   },
   contentBlockStandart: {
     marginTop: 8,
@@ -385,6 +381,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
   },
+  contentBlockClassic: {},
   contentBlockVertical: {
     paddingVertical: 12,
     paddingHorizontal: 12,
@@ -398,11 +395,6 @@ const styles = StyleSheet.create({
   description: {},
   disabled: {
     opacity: 0.6,
-  },
-  imageLinearGradient: {
-    position: 'absolute',
-    inset: 0,
-    borderRadius: 12,
   },
 });
 
