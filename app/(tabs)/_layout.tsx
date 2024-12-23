@@ -3,15 +3,13 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { useTextStyles } from '@/hooks/useTextStyles';
 import { useScale } from '@/hooks/useScale';
 
 import ThemeProvider from '@/ds/styles/ThemeProvider';
+import { Colors } from '@/ds/styles/themes/tokens';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const textStyles = useTextStyles();
   const scale = useScale();
 
@@ -34,10 +32,10 @@ export default function TabLayout() {
     <ThemeProvider>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: '#0a7ea4',
           tabBarStyle: {
             height: textStyles.title.lineHeight * 2,
-            backgroundColor: '#1F1F1F',
+            backgroundColor: Colors.neutral10,
           },
           tabBarPosition: 'top',
           tabBarIconStyle: {
