@@ -46,7 +46,7 @@ export type TextRef = React.ForwardedRef<{
  * ## Usage
  * ```js
  * import * as React from 'react';
- * import { Text } from 'react-native-paper';
+ * import { Text } from '@ds/components';;
  *
  * const MyComponent = () => (
  *   <>

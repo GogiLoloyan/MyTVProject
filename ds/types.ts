@@ -40,6 +40,7 @@ export type Colors = {
   surface: string;
   surfaceVariant: string;
   surfaceDisabled: string;
+  surfaceContainer: string;
   background: string;
   error: string;
   errorContainer: string;
