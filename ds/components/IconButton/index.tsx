@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 
-import { type ButtonMode, getButtonColors } from './utils';
+import { type ButtonVariant, getButtonColors } from './utils';
 import { useInternalTheme } from '../../styles/ThemeProvider';
 import type { ThemeProp } from '../../types';
 import { forwardRef } from '../../utils/forwardRef';
@@ -32,13 +32,13 @@ const buttonSizes = {
 
 export type Props = {
   /**
-   * Mode of the button. You can change the mode to adjust the styling to give it desired emphasis.
+   * Variant of the button. You can change the variant to adjust the styling to give it desired emphasis.
    */
-  mode?: ButtonMode;
+  variant?: ButtonVariant;
   /**
    * Icon to display for the `Button`.
    */
-  icon?: React.ComponentProps<typeof Icon>['name'];
+  icon: React.ComponentProps<typeof Icon>['name'];
   /**
    * Custom icon's size.
    */
@@ -113,7 +113,7 @@ export type Props = {
 const IconButton = (
   {
     disabled,
-    mode = 'default',
+    variant = 'default',
     icon,
     size = 'm',
     accessibilityLabel,
@@ -158,7 +158,7 @@ const IconButton = (
   const borderRadius = buttonSize / 2;
 
   const { backgroundColor, borderColor, textColor } = getButtonColors({
-    mode,
+    variant,
     theme,
     disabled,
     focusState,
@@ -182,36 +182,35 @@ const IconButton = (
       onLongPress={onLongPress}
       delayLongPress={delayLongPress}
       activeOpacity={1} // Prevent opacity change on press
-      style={styles.button}
+      style={styles.container}
       testID={`${testID}-container`}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
       accessibilityRole={accessibilityRole}
     >
-      <Animated.View
-        style={[
-          styles.buttonContent,
-          buttonStyle,
-          contentStyle,
-          { transform: [{ scale }] },
-          { width: buttonSize, height: buttonSize },
-        ]}
-      >
-        {icon && (
-          <View style={styles.icon} testID={`${testID}-icon-container`}>
-            <Icon name={icon} size={iconSize} color={textColor} />
-          </View>
-        )}
+      <Animated.View style={[{ transform: [{ scale }] }]}>
+        <View
+          style={[
+            styles.buttonContent,
+            buttonStyle,
+            contentStyle,
+            { width: buttonSize, height: buttonSize },
+          ]}
+        >
+          <Icon
+            testID={`${testID}-icon`}
+            name={icon}
+            size={iconSize}
+            color={textColor}
+          />
+        </View>
       </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  container: {},
   buttonContent: {
     overflow: 'hidden',
     alignItems: 'center',
