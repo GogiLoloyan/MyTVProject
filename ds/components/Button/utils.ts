@@ -1,24 +1,24 @@
 import color from 'color';
 
 import type { InternalTheme } from '../../types';
-import { FocusState } from '../../hooks/useFocusSystemHandlers';
+import type { FocusState } from '../../hooks/useFocusSystemHandlers';
 
-export type ButtonMode = 'default' | 'outlined';
+export type ButtonVariant = 'default' | 'outlined';
 
 type BaseProps = {
-  mode: ButtonMode;
+  variant: ButtonVariant;
   theme: InternalTheme;
   disabled?: boolean;
   focusState: FocusState;
 };
 
 export const getButtonColors = ({
-  mode,
+  variant,
   theme,
   focusState,
   disabled,
 }: BaseProps) => {
-  if (mode === 'default') {
+  if (variant === 'default') {
     if (disabled) {
       if (focusState === 'focused') {
         return {
@@ -72,7 +72,7 @@ export const getButtonColors = ({
     };
   }
 
-  if (mode === 'outlined') {
+  if (variant === 'outlined') {
     if (disabled) {
       if (focusState === 'default') {
         return {

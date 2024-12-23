@@ -15,7 +15,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import type { ThemeProp } from '../../types';
 import { forwardRef } from '../../utils/forwardRef';
 import { splitStyles } from '../../utils/splitStyles';
-import { type ButtonMode, getButtonColors } from './utils';
+import { type ButtonVariant, getButtonColors } from './utils';
 import { useInternalTheme } from '../../styles/ThemeProvider';
 import { useFocusSystemHandlers } from '../../hooks/useFocusSystemHandlers';
 import Text from '../Typography/Text';
@@ -25,9 +25,9 @@ import Text from '../Typography/Text';
 
 export type Props = {
   /**
-   * Mode of the button. You can change the mode to adjust the styling to give it desired emphasis.
+   * Variant of the button. You can change the variant to adjust the styling to give it desired emphasis.
    */
-  mode?: ButtonMode;
+  variant?: ButtonVariant;
   /**
    * Icon to display for the `Button`.
    */
@@ -106,7 +106,7 @@ export type Props = {
  * ## Usage
  * ```js
  * import * as React from 'react';
- * import { Button } from 'react-native-paper';
+ * import { Button } from '@ds/components';
  *
  * const MyComponent = () => (
  *   <Button icon="camera" onPress={() => console.log('Pressed')}>
@@ -120,7 +120,7 @@ export type Props = {
 const Button = (
   {
     disabled,
-    mode = 'default',
+    variant = 'default',
     icon,
     iconSize: customIconSize,
     children,
@@ -169,7 +169,7 @@ const Button = (
   const iconSize = customIconSize ?? 20;
 
   const { backgroundColor, borderColor, textColor } = getButtonColors({
-    mode,
+    variant,
     theme,
     disabled,
     focusState,
@@ -205,51 +205,43 @@ const Button = (
       onLongPress={onLongPress}
       delayLongPress={delayLongPress}
       activeOpacity={1} // Prevent opacity change on press
-      style={styles.button}
+      style={[styles.container, style]}
       testID={`${testID}-container`}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
       accessibilityRole={accessibilityRole}
     >
-      <Animated.View
-        style={[
-          styles.buttonContent,
-          buttonStyle,
-          contentStyle,
-          { transform: [{ scale }] },
-        ]}
-      >
-        {icon && (
-          <View style={iconStyle} testID={`${testID}-icon-container`}>
-            <Icon name={icon} size={iconSize} color={textColor} />
-          </View>
-        )}
-        {children && (
-          <Text
-            variant="labelLarge"
-            selectable={false}
-            numberOfLines={1}
-            testID={`${testID}-label`}
-            style={[
-              styles.buttonLabel,
-              textStyle,
-              uppercase && styles.uppercaseLabel,
-            ]}
-            maxFontSizeMultiplier={maxFontSizeMultiplier}
-          >
-            {children}
-          </Text>
-        )}
+      <Animated.View style={[{ transform: [{ scale }] }]}>
+        <View style={[styles.buttonContent, buttonStyle, contentStyle]}>
+          {icon && (
+            <View style={iconStyle} testID={`${testID}-icon-container`}>
+              <Icon name={icon} size={iconSize} color={textColor} />
+            </View>
+          )}
+          {children && (
+            <Text
+              variant="labelLarge"
+              selectable={false}
+              numberOfLines={1}
+              testID={`${testID}-label`}
+              style={[
+                styles.buttonLabel,
+                textStyle,
+                uppercase && styles.uppercaseLabel,
+              ]}
+              maxFontSizeMultiplier={maxFontSizeMultiplier}
+            >
+              {children}
+            </Text>
+          )}
+        </View>
       </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  container: {},
   buttonContent: {
     height: 40,
     overflow: 'hidden',
